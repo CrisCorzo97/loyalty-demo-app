@@ -1,0 +1,195 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Enum para tipos de usuario
+enum UserType {
+  MERCHANT
+  CONSUMER
+}
+
+// Enum para roles de empleados
+enum EmployeeRole {
+  ADMIN
+  CASHIER
+  MANAGER
+}
+
+// Enum para tipos de premio
+enum RewardType {
+  PRODUCT_SERVICE
+  PERCENTAGE_DISCOUNT
+  FIXED_AMOUNT
+  FREE_ITEM
+}
+
+// Enum para estados de consumisión
+enum ConsumptionStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+// Enum para estados de canje
+enum RedemptionStatus {
+  PENDING
+  REDEEMED
+  EXPIRED
+  CANCELLED
+}
+
+// Modelo principal de Usuario (integrado con Clerk)
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique // ID de Clerk
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  dni       String?  @unique // DNI para validar consumisiones
+  phone     String?
+  userType  UserType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  businesses  Business[] // Si es comerciante
+  consumptions Consumption[] // Si es consumidor
+  redemptions  Redemption[] // Si es consumidor
+
+  @@map("users")
+}
+
+// Modelo de Negocio/Comercio
+model Business {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  address     String?
+  phone       String?
+  email       String?
+  category    String? // gastronómico, indumentaria, etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relación con el propietario
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Relaciones
+  employees    Employee[]
+  rewards      Reward[]
+  consumptions Consumption[]
+  redemptions  Redemption[]
+
+  @@map("businesses")
+}
+
+// Modelo de Empleado
+model Employee {
+  id        String       @id @default(cuid())
+  email     String
+  firstName String
+  lastName  String
+  role      EmployeeRole @default(CASHIER)
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relación con el negocio
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  // Relaciones
+  consumptions Consumption[] // Consumisiones registradas por este empleado
+  redemptions  Redemption[]  // Canjes validados por este empleado
+
+  @@unique([email, businessId]) // Un empleado puede trabajar en múltiples negocios
+  @@map("employees")
+}
+
+// Modelo de Premio
+model Reward {
+  id                String     @id @default(cuid())
+  name              String
+  description       String?
+  type              RewardType
+  value             Float? // Para descuentos o montos fijos
+  requiredPoints    Int        @default(10) // Consumisiones necesarias
+  isActive          Boolean    @default(true)
+  validUntil        DateTime?
+  termsAndConditions String?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  // Relación con el negocio
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  // Relaciones
+  redemptions Redemption[]
+
+  @@map("rewards")
+}
+
+// Modelo de Consumisión
+model Consumption {
+  id          String            @id @default(cuid())
+  amount      Float // Monto de la consumisión
+  points      Int               @default(1) // Puntos otorgados (normalmente 1 por consumisión)
+  status      ConsumptionStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relaciones
+  customerId String
+  customer   User     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  employeeId String?
+  employee   Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+
+  @@map("consumptions")
+}
+
+// Modelo de Canje de Premio
+model Redemption {
+  id             String           @id @default(cuid())
+  status         RedemptionStatus @default(PENDING)
+  securityCode   String           @unique // Código QR o alfanumérico para validar
+  redeemedAt     DateTime?
+  expiresAt      DateTime?
+  notes          String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  // Relaciones
+  customerId String
+  customer   User   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  rewardId String
+  reward   Reward @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  
+  validatedById String?
+  validatedBy   Employee? @relation(fields: [validatedById], references: [id], onDelete: SetNull)
+
+  @@map("redemptions")
+}

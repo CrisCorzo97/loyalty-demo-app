@@ -1,0 +1,643 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Core Stack",
+        "description": "Initialize the project repository with Next.js 15+ (App Router), Tailwind CSS, Shadcn/ui, Prisma, and PostgreSQL (Supabase). Configure Clerk for authentication.",
+        "details": "Create a new Next.js project using the latest App Router. Install and configure Tailwind CSS and Shadcn/ui for UI components. Set up Prisma ORM with PostgreSQL hosted on Supabase. Integrate Clerk for user authentication, roles, and sessions. Initialize the repository with a basic README and project structure.",
+        "testStrategy": "Verify project setup by running the development server and checking that all dependencies are installed and configured. Test Clerk integration by registering a test user and logging in.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Next.js Project",
+            "description": "Set up a new Next.js project using the create-next-app CLI, ensuring TypeScript, ESLint, and module path aliases are configured.",
+            "dependencies": [],
+            "details": "Run the create-next-app command, select TypeScript and ESLint options, and verify the initial project runs locally.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Configure App Router",
+            "description": "Set up the Next.js App Router by organizing the /app directory and implementing basic routing structure.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure the /app directory exists, create initial route files, and verify navigation between pages works as expected.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Install and Configure Tailwind CSS",
+            "description": "Add Tailwind CSS to the project and configure it for use with Next.js.",
+            "dependencies": [
+              1
+            ],
+            "details": "Install Tailwind CSS, initialize its config files, and update global styles to use Tailwind directives.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Integrate Shadcn/ui",
+            "description": "Install and configure Shadcn/ui component library for use with Tailwind CSS and Next.js.",
+            "dependencies": [
+              3
+            ],
+            "details": "Follow Shadcn/ui installation steps, ensure components render correctly, and update Tailwind config if required.",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Set Up Prisma with Supabase PostgreSQL",
+            "description": "Install Prisma, configure it to connect to a Supabase PostgreSQL database, and run initial migrations.",
+            "dependencies": [
+              1
+            ],
+            "details": "Install Prisma CLI, set up the schema, configure the database URL for Supabase, and run prisma migrate to create tables.\n<info added on 2025-06-24T00:43:29.277Z>\n✅ Prisma instalado correctamente  \n✅ Esquema de base de datos creado con todos los modelos necesarios:\n- User (integrado con Clerk, incluye DNI para validación)\n- Business (comercios)\n- Employee (empleados con roles)\n- Reward (premios con diferentes tipos)\n- Consumption (consumisiones validadas por DNI)\n- Redemption (canjes con códigos de seguridad)\n\nPróximos pasos:\n- Configurar DATABASE_URL en .env con credenciales de Supabase\n- Ejecutar primera migración: npx prisma migrate dev\n- Generar cliente de Prisma: npx prisma generate\n</info added on 2025-06-24T00:43:29.277Z>",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Integrate Clerk Authentication",
+            "description": "Add Clerk authentication to the project and configure it for use with the App Router.",
+            "dependencies": [
+              2
+            ],
+            "details": "Install Clerk packages, set up ClerkProvider in the app layout, and implement authentication guards on protected routes.\n<info added on 2025-06-24T00:46:25.871Z>\n✅ Clerk instalado correctamente (@clerk/nextjs)\n✅ ClerkProvider configurado en el layout principal con metadata en español\n✅ Middleware de autenticación protege rutas /dashboard, /business, /admin, /profile\n✅ Páginas de sign-in y sign-up creadas con componentes de Clerk y diseño personalizado\n✅ Dashboard básico creado para probar la autenticación y mostrar información del usuario\n✅ UserButton integrado para cerrar sesión\n\nConfiguración completada. Próximo paso: Configurar variables de entorno de Clerk en .env\n</info added on 2025-06-24T00:46:25.871Z>",
+            "status": "done",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Prepare Initial README and Project Structure",
+            "description": "Draft a README file and organize the project directory structure for clarity and maintainability.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Document setup steps, core stack, and usage instructions in README; ensure folders for components, routes, and utilities are in place.\n<info added on 2025-06-24T00:48:17.613Z>\nREADME.md completamente actualizado con toda la información esencial del proyecto, incluyendo descripción, stack tecnológico, instrucciones de instalación paso a paso, estructura de carpetas documentada, guía de configuración y despliegue, detalles sobre modelos de datos y autenticación.  \nEstructura de proyecto organizada con las carpetas hooks/ y types/ creadas; archivo types/index.ts centralizando todas las interfaces TypeScript, enums y tipos alineados con el esquema de Prisma, y tipos específicos para formularios y respuestas de API.  \nDocumentación técnica profesional en el README con emojis y formato claro, referencias al archivo SETUP.md para configuración, comandos útiles documentados y guía de contribución incluida.  \nEl proyecto está completamente estructurado y documentado para facilitar el desarrollo y la colaboración.\n</info added on 2025-06-24T00:48:17.613Z>",
+            "status": "done",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Authentication and User Roles",
+        "description": "Implement Clerk-based authentication for both merchant and consumer roles. Create user management logic.",
+        "details": "Configure Clerk to handle user registration and login. Define user roles (MERCHANT, CONSUMER) in the Prisma schema. Implement logic to assign roles during registration. Ensure session management and role-based access control.",
+        "testStrategy": "Test user registration and login for both roles. Verify role assignment and access control. Check session persistence and logout.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure Clerk Registration and Login",
+            "description": "Set up Clerk authentication in the project, including registration and login flows. This involves creating a Clerk account, configuring authentication methods, integrating Clerk into the application, and ensuring users can sign up and log in.",
+            "dependencies": [],
+            "details": "Follow Clerk's quickstart guides to create a Clerk application, select authentication methods (e.g., email), copy environment variables, and integrate Clerk into the codebase. Test registration and login functionality to confirm users can authenticate successfully.[3][4][5]",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Define User Roles in Prisma Schema",
+            "description": "Extend the Prisma schema to include user roles. This typically involves adding a 'role' field to the User model and updating the database accordingly.",
+            "dependencies": [
+              1
+            ],
+            "details": "Modify the Prisma schema file to add a 'role' field (e.g., enum: 'USER', 'ADMIN') to the User model. Run database migrations to apply the changes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Role Assignment Logic",
+            "description": "Develop logic to assign roles to users upon registration or through an admin interface. Ensure roles are correctly stored and retrievable from the database.",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement backend logic to assign a default role (e.g., 'USER') on registration, and provide mechanisms for role updates (e.g., admin panel or API endpoint).",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Set Up Session Management",
+            "description": "Integrate Clerk's session management to securely track authenticated users and their roles throughout the application.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Use Clerk's session APIs to manage user sessions, ensuring that session data includes user role information for access control purposes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Enforce Role-Based Access Control",
+            "description": "Implement middleware or guards to restrict access to routes and resources based on user roles.",
+            "dependencies": [
+              4
+            ],
+            "details": "Create middleware (e.g., in Next.js, a custom middleware.js) that checks the user's role before granting access to protected routes. Ensure unauthorized users are redirected or denied access as appropriate.[4]",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Create Business Profile Management",
+        "description": "Allow merchants to create and manage their business profiles.",
+        "details": "Develop a form for merchants to create and edit business profiles. Store business data in the Prisma schema (Business model). Link each business to a merchant user. Implement CRUD operations for business profiles.",
+        "testStrategy": "Test business profile creation, editing, and deletion. Verify data integrity and user-business association.",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Business Profile Form",
+            "description": "Create the layout and fields for the business profile form, ensuring it captures all necessary business information (e.g., name, address, contact details, business type).",
+            "dependencies": [],
+            "details": "Define required and optional fields, validation rules, and user interface elements for the form.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Create/Edit Functionality",
+            "description": "Develop the frontend logic to allow users to create new business profiles and edit existing ones using the designed form.",
+            "dependencies": [
+              1
+            ],
+            "details": "Integrate form with state management, handle form submission, and display validation errors or success messages.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Link Businesses to Merchant Users",
+            "description": "Establish the association between business profiles and merchant user accounts, ensuring each business is correctly linked to its owner(s).",
+            "dependencies": [
+              2
+            ],
+            "details": "Update data models and implement logic to assign or reassign business profiles to merchant users during creation or editing.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Handle Backend CRUD Operations",
+            "description": "Implement backend endpoints and logic to support Create, Read, Update, and Delete operations for business profiles, including user association.",
+            "dependencies": [
+              3
+            ],
+            "details": "Develop API endpoints, database models, and business logic to manage business profiles and their links to merchant users.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Implement Reward Management",
+        "description": "Enable merchants to create, update, and delete rewards.",
+        "details": "Develop a UI for merchants to manage rewards (create, edit, delete). Store reward data in the Prisma schema (Reward model). Link rewards to businesses. Allow setting conditions for earning rewards (e.g., number of consumptions).",
+        "testStrategy": "Test reward creation, editing, and deletion. Verify reward-business association and condition logic.",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Reward Management UI",
+            "description": "Create wireframes and visual designs for the reward management interface, ensuring usability for creating, editing, deleting, and viewing rewards.",
+            "dependencies": [],
+            "details": "Focus on intuitive layouts for CRUD operations, clear navigation, and accessibility. Include forms for reward details and feedback mechanisms.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Create/Edit/Delete Logic for Rewards",
+            "description": "Develop backend and frontend logic to support creating, editing, and deleting rewards within the system.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure data validation, error handling, and seamless integration with the UI. Support for both synchronous and asynchronous operations as needed.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Link Rewards to Businesses",
+            "description": "Establish relationships between rewards and specific businesses, allowing rewards to be assigned, filtered, or managed per business entity.",
+            "dependencies": [
+              2
+            ],
+            "details": "Design database schema and implement logic to associate rewards with one or more businesses. Update UI to reflect these associations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Set Up Condition Logic for Earning Rewards",
+            "description": "Implement business logic that defines and evaluates the conditions under which users can earn rewards.",
+            "dependencies": [
+              3
+            ],
+            "details": "Support configurable conditions (e.g., milestones, behaviors, achievements) and ensure the system can evaluate and trigger rewards accordingly.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Develop Consumption Registration Flow",
+        "description": "Allow merchants to register customer consumptions by DNI.",
+        "details": "Create a UI for merchants to search for customers by DNI and register a consumption. Store consumption data in the Prisma schema (Consumption model). Link consumptions to customers and businesses. Implement validation and confirmation before saving.",
+        "testStrategy": "Test consumption registration, validation, and confirmation. Verify data integrity and customer-business association.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Build Customer Search by DNI",
+            "description": "Develop the functionality to search for customers using their DNI (national identification number). This includes creating the search UI and integrating it with the backend to retrieve customer data.",
+            "dependencies": [],
+            "details": "Ensure the search is responsive and handles cases where the customer is not found. Display relevant customer information upon a successful search.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Consumption Registration UI",
+            "description": "Design and build the user interface for registering consumption data after a customer is selected.",
+            "dependencies": [
+              1
+            ],
+            "details": "The UI should allow users to input consumption details such as item, quantity, and date. It should be intuitive and guide the user through the registration process.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Validate Input Data",
+            "description": "Implement validation logic to ensure all required fields are filled and data formats are correct before allowing submission.",
+            "dependencies": [
+              2
+            ],
+            "details": "Check for missing or invalid data (e.g., negative quantities, invalid dates) and provide user feedback for corrections.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Save Consumption Data",
+            "description": "Develop the backend logic to persist validated consumption data to the database or relevant storage.",
+            "dependencies": [
+              3
+            ],
+            "details": "Ensure transactional integrity and handle any errors that may occur during the save operation. Log the transaction for audit purposes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Confirm Registration to User",
+            "description": "Provide a confirmation message or screen to the user indicating successful registration of the consumption data.",
+            "dependencies": [
+              4
+            ],
+            "details": "Display a clear confirmation and optionally show a summary of the registered data. Handle and display errors if the registration fails.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement Reward Redemption Logic",
+        "description": "Enable customers to redeem rewards and merchants to validate them.",
+        "details": "Develop logic to check if a customer qualifies for a reward. Generate a secure QR or alphanumeric code for redemption. Allow merchants to validate and record redemptions (Redemption model).",
+        "testStrategy": "Test reward qualification, code generation, and redemption validation. Verify redemption data integrity.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Check Reward Qualification",
+            "description": "Implement logic to verify if a user meets the criteria to redeem a reward, such as minimum points, eligibility, and any program-specific rules.",
+            "dependencies": [],
+            "details": "This includes checking user account status, accumulated points, and any restrictions or exclusions set by the reward program.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Generate Secure Redemption Codes",
+            "description": "Develop a secure mechanism to generate unique, tamper-proof redemption codes for qualified users.",
+            "dependencies": [
+              1
+            ],
+            "details": "Codes should be cryptographically secure, unique per redemption, and include metadata for tracking and validation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Build Redemption User Interface (UI)",
+            "description": "Design and implement a user-friendly interface for users to view available rewards, initiate redemptions, and enter or receive redemption codes.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "The UI should clearly communicate redemption steps, eligibility, and provide feedback on redemption status.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Validate Redemptions",
+            "description": "Create backend logic to validate submitted redemption codes, ensuring they are authentic, unexpired, and not previously redeemed.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Validation should check code integrity, expiration, and redemption status, and handle invalid or fraudulent attempts securely.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Record Redemption Data",
+            "description": "Implement transactional logic to record successful redemptions, including user, reward, timestamp, and code details.",
+            "dependencies": [
+              4
+            ],
+            "details": "Ensure data integrity and auditability by logging all redemption attempts and outcomes for reporting and troubleshooting.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Handle Edge Cases",
+            "description": "Develop logic to manage edge cases such as expired codes, already redeemed codes, insufficient points, and system errors.",
+            "dependencies": [
+              4,
+              5
+            ],
+            "details": "Provide clear user feedback and error handling for all exceptional scenarios to ensure a seamless and transparent redemption experience.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Build Consumer Portal for Reward and Consumption Tracking",
+        "description": "Allow consumers to view their rewards and consumption history.",
+        "details": "Develop a consumer portal where users can see their rewards and consumption history per business. Display available rewards and progress toward earning them.",
+        "testStrategy": "Test reward and consumption history display. Verify data accuracy and user experience.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Portal UI",
+            "description": "Create a user-centric, intuitive, and accessible interface for the consumer portal, ensuring clear navigation, consistent CTA buttons, and device compatibility.",
+            "dependencies": [],
+            "details": "Apply best practices such as keeping the layout simple, using logical categories, and ensuring accessibility and security. Incorporate onboarding elements and responsive design for all devices.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Reward History Display",
+            "description": "Develop the functionality to display users' reward history in a clear and organized manner within the portal.",
+            "dependencies": [
+              1
+            ],
+            "details": "Ensure the reward history section is easy to find and understand, using tables or lists as appropriate. Integrate with backend data sources to fetch and present accurate reward information.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Show Consumption Progress",
+            "description": "Build a feature to visually present users' consumption progress, such as usage bars or charts, within the portal.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design visual indicators (e.g., progress bars, charts) that are easy to interpret and update in real time. Ensure this section is accessible and fits seamlessly with the overall UI.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Ensure Data Accuracy and Optimize User Experience",
+            "description": "Implement data validation, aggregation logic, and UX testing to guarantee accurate information display and a smooth user experience.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Set up backend checks for data accuracy, perform user testing for usability, and refine the portal based on feedback. Ensure security and privacy standards are met throughout.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Develop Merchant Analytics Dashboard",
+        "description": "Create a dashboard for merchants to view key metrics.",
+        "details": "Build a dashboard for merchants to view customer activity and program performance. Display metrics such as number of consumptions, redemptions, and customer engagement.",
+        "testStrategy": "Test dashboard data accuracy and UI responsiveness. Verify metric calculations.",
+        "priority": "low",
+        "dependencies": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Key Metrics",
+            "description": "Identify and document the most relevant metrics and KPIs that align with business goals and user needs for the analytics dashboard.",
+            "dependencies": [],
+            "details": "Engage stakeholders to determine which metrics provide actionable insights, ensuring they are specific, measurable, and aligned with the dashboard's purpose.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Data Aggregation Logic",
+            "description": "Develop the backend logic to collect, process, and aggregate raw data into the defined metrics.",
+            "dependencies": [
+              1
+            ],
+            "details": "Design and implement data pipelines or queries that efficiently aggregate data at the required granularity and frequency for each metric.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Design Dashboard UI",
+            "description": "Create the user interface for the dashboard, focusing on clear visualization and intuitive layout of key metrics.",
+            "dependencies": [
+              1
+            ],
+            "details": "Apply dashboard design best practices, such as logical layout, minimalism, and clear labeling, to ensure users can quickly interpret and act on the data.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Ensure Real-Time or Periodic Updates",
+            "description": "Implement mechanisms to refresh dashboard data in real-time or at scheduled intervals, based on user requirements.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Set up data refresh schedules or streaming updates to keep the dashboard metrics current, ensuring performance and reliability.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Validate Metric Accuracy",
+            "description": "Test and verify that all displayed metrics are accurate and reflect the underlying data correctly.",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Perform data validation, cross-checks, and user acceptance testing to ensure the dashboard's outputs are trustworthy and actionable.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Implement Commerce Discovery for Consumers",
+        "description": "Allow consumers to discover and filter participating businesses.",
+        "details": "Develop a page for consumers to browse and filter businesses by location, popularity, etc. Display business profiles and available rewards.",
+        "testStrategy": "Test business discovery, filtering, and profile display. Verify data accuracy and user experience.",
+        "priority": "low",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Polish UI/UX and General Improvements",
+        "description": "Refine the user interface and overall user experience.",
+        "details": "Review and improve UI/UX across all pages. Address usability issues, add loading states, and ensure consistent styling. Implement feedback from user testing.",
+        "testStrategy": "Conduct user testing and gather feedback. Test UI responsiveness and consistency. Address any reported issues.",
+        "priority": "low",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Conduct User Testing",
+            "description": "Plan and execute user testing sessions to gather feedback on the current UI/UX. This includes recruiting representative users, preparing test scenarios, observing user interactions, and collecting qualitative and quantitative data.",
+            "dependencies": [],
+            "details": "User testing helps identify pain points, usability issues, and areas for improvement by observing real users interacting with the app.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Address Usability Issues",
+            "description": "Analyze user testing results to identify and prioritize usability issues. Implement design and functionality changes to resolve these issues and improve the overall user experience.",
+            "dependencies": [
+              1
+            ],
+            "details": "Focus on issues that hinder user flow, cause confusion, or prevent users from completing key tasks efficiently.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add Loading and Error States",
+            "description": "Design and implement clear loading indicators and error messages throughout the app to inform users of system status and guide them when issues occur.",
+            "dependencies": [
+              2
+            ],
+            "details": "Ensure all asynchronous actions and potential failure points provide appropriate feedback to users, reducing frustration and uncertainty.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Ensure Consistent Styling Across the App",
+            "description": "Review and update UI components to maintain consistent styling, including typography, colors, spacing, and iconography, across all screens and features.",
+            "dependencies": [
+              3
+            ],
+            "details": "Apply a unified design system or style guide to ensure visual and interaction consistency, enhancing the app's professionalism and usability.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-23T23:21:53.029Z",
+      "updated": "2025-06-24T00:48:31.371Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

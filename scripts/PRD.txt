@@ -1,0 +1,108 @@
+# Documento de Requisitos del Producto (PRD): App de Fidelización
+
+## Overview
+
+Esta aplicación web busca ofrecer a los pequeños y medianos comercios, inicialmente del sector gastronómico, una herramienta sencilla y eficaz para fidelizar a sus clientes. El problema principal que resuelve es la falta de mecanismos accesibles para que los negocios fomenten la recurrencia de sus clientes y aumenten sus ventas. La solución es una plataforma digital donde los comercios pueden implementar un programa de lealtad basado en consumisiones, y los clientes pueden obtener premios por su fidelidad.
+
+## Core Features
+
+### 1. Gestión de Usuarios (Autenticación con Clerk)
+
+- **Registro e Inicio de Sesión:** Cuentas separadas y seguras para dos tipos de roles: `Comerciante` y `Consumidor`.
+
+### 2. Panel del Comerciante
+
+- **Gestión de Empleados:**
+  - Dar de alta y baja a empleados.
+  - Asignar roles y permisos (ej: "cajero" solo puede escanear, "admin" puede crear premios).
+- **Gestión de Premios:**
+  - Crear nuevos premios (ej: "Café gratis", "15% de descuento").
+  - Establecer las condiciones para obtenerlos (ej: "Acumular 10 consumisiones").
+  - Definir el tipo de premio (producto, descuento porcentual, importe fijo).
+- **Gestión de Consumisiones:**
+  - Cargar nuevas consumisiones buscando al cliente por su DNI.
+  - Visualizar el historial de consumisiones por cliente.
+  - Capacidad para modificar o eliminar un registro en caso de error.
+- **Gestión de Canjes:**
+  - Validar y otorgar premios a los clientes mediante un código QR de seguridad (o código alfanumérico).
+  - Rastrear el historial de premios canjeados.
+- **Métricas y Analíticas:**
+  - Panel para visualizar métricas clave sobre la actividad de los clientes y el rendimiento del programa de fidelización.
+
+### 3. Portal del Consumidor
+
+- **Exploración de Comercios:**
+  - Ver una lista de comercios adheridos, con filtros por cercanía, popularidad, etc.
+- **Gestión de Consumisiones:**
+  - Simplemente proporcionar su DNI en el comercio para registrar la consumisión.
+  - Visualizar el progreso y el historial de consumisiones por cada comercio.
+- **Gestión de Premios:**
+  - Ver los premios obtenidos.
+  - Generar un código QR de seguridad (o código alfanumérico) para reclamar un premio en el local.
+
+## User Experience (UX)
+
+- **User Personas:**
+  - **Sofía (Comerciante):** Dueña de una cafetería de barrio. Quiere que sus clientes vuelvan más seguido pero no tiene tiempo ni conocimientos para herramientas de marketing complexas. Necesita una solución "configurar y olvidar".
+  - **Mateo (Consumidor):** Oficinista que almuerza fuera todos los días. Le motivan los descuentos y se siente valorado cuando un local premia su lealtad. Quiere una app que no le complique la vida.
+- **Key User Flows:**
+  - **Registro de un Comercio:** Sofía se registra, crea el perfil de su cafetería, define su primer premio (ej: "un postre gratis cada 5 almuerzos") y ya está lista para empezar.
+  - **La Consumisión:** Mateo termina su almuerzo, informa su número de DNI al empleado del local. El empleado ingresa el DNI en el sistema, confirma el nombre de Mateo y registra la consumisión. Mateo ve en su app que ya tiene 1 de 5 almuerzos para su postre.
+  - **El Canje:** Tras su quinta consumisión, la app de Mateo le notifica que tiene un premio. Al día siguiente, hace clic en "Reclamar premio", muestra un nuevo QR de seguridad (o un código), el empleado lo ingresa en el sistema y le entrega su postre.
+
+## Technical Architecture
+
+- **Framework Frontend/Backend:** Next.js 15+ (con App Router)
+- **Estilos:** Tailwind CSS
+- **Componentes UI:** Shadcn/ui
+- **Autenticación:** Clerk (Manejo de usuarios, roles y sesiones)
+- **ORM:** Prisma
+- **Base de Datos:** PostgreSQL (gestionada en Supabase)
+- **Despliegue:** Vercel
+
+### Modelos de Datos (Esquema Prisma inicial)
+
+- `User`: Perfil vinculado al usuario de Clerk, con un rol (`MERCHANT` o `CONSUMER`).
+- `Business`: Perfil del comercio, vinculado a un `User` comerciante.
+- `Employee`: Vinculado a un `Business` y a un `User` (el del empleado).
+- `Reward`: Premio definido por un `Business`.
+- `Consumption`: Registro de una compra, vinculado a un `User` consumidor y a un `Business`.
+- `Redemption`: Registro de un canje, vinculado a un `User` consumidor y a un `Reward`.
+
+## Development Roadmap (MVP)
+
+1.  **Fase 1: Fundación y Autenticación**
+    - Configuración del proyecto: Next.js, Prisma, Supabase, Tailwind, Shadcn.
+    - Integración de Clerk para registro y login de Comerciantes y Consumidores.
+    - Creación de los esquemas básicos en Prisma (`User`, `Business`).
+2.  **Fase 2: Funcionalidad Central del Comerciante**
+    - Flujo para que un comerciante cree y administre el perfil de su negocio.
+    - CRUD para la gestión de Premios.
+3.  **Fase 3: Flujo de Consumisión**
+    - Interfaz para que el comerciante ingrese el DNI del cliente.
+    - Lógica de búsqueda de cliente y registro de consumisión.
+4.  **Fase 4: Cierre del Ciclo (Canje)**
+    - Lógica que verifica si se cumplen las condiciones de un premio.
+    - Flujo de reclamación y validación de premios mediante QR de seguridad o código alfanumérico.
+    - Vista para que el consumidor vea sus premios disponibles.
+5.  **Fase 5: Métricas y Descubrimiento**
+    - Panel básico de métricas para el comerciante.
+    - Página para que los consumidores descubran los comercios adheridos.
+    - Pulido general de la UI/UX.
+
+## Logical Dependency Chain
+
+1.  **Autenticación:** Es la base de todo. Sin usuarios no hay aplicación.
+2.  **Creación del Comercio y los Premios:** Un consumidor no puede hacer nada si no hay comercios ni premios definidos.
+3.  **Registro de Consumisiones:** Es la interacción principal que da vida al sistema.
+4.  **Canje de Premios:** Cierra el ciclo de valor para el consumidor.
+5.  **Funcionalidades Adicionales:** Las métricas, gestión de empleados y filtros de búsqueda se construyen sobre este núcleo funcional.
+
+## Risks and Mitigations
+
+- **Riesgo:** Posibles errores de tipeo al ingresar el DNI y manejo de la privacidad de los datos.
+  - **Mitigación:** Usar un campo de entrada con formato y validación para el DNI. Mostrar siempre el nombre del cliente para confirmación antes de registrar. Ser transparentes en la política de privacidad sobre el uso del DNI, que solo se usará como identificador.
+- **Riesgo:** El alcance del MVP es amplio.
+  - **Mitigación:** Ser estrictos con las fases. Si es necesario, funcionalidades como "Gestión de Empleados" o las "Métricas Avanzadas" pueden posponerse para una versión post-MVP para asegurar que el ciclo de consumisión-premio sea perfecto.
+- **Riesgo:** Adopción por parte de los comercios.
+  - **Mitigación:** El proceso de registro y creación del primer premio debe ser extremadamente simple y rápido (menos de 5 minutos). El valor debe ser evidente desde el primer momento. 
