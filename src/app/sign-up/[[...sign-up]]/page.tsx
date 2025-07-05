@@ -2,6 +2,9 @@
 import { SignUp, useUser, useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 export default function Page() {
   const { isSignedIn, user } = useUser();
@@ -82,38 +85,26 @@ export default function Page() {
           ¿Qué tipo de usuario eres?
         </h2>
         <form onSubmit={handleRoleSubmit} className='space-y-4'>
-          <div className='flex flex-col gap-2'>
-            <label className='flex items-center gap-2'>
-              <input
-                type='radio'
-                name='userType'
-                value='MERCHANT'
-                checked={userType === 'MERCHANT'}
-                onChange={() => setUserType('MERCHANT')}
-                required
-              />
-              Comerciante
-            </label>
-            <label className='flex items-center gap-2'>
-              <input
-                type='radio'
-                name='userType'
-                value='CONSUMER'
-                checked={userType === 'CONSUMER'}
-                onChange={() => setUserType('CONSUMER')}
-                required
-              />
-              Consumidor
-            </label>
-          </div>
-          {error && <div className='text-red-600 text-sm'>{error}</div>}
-          <button
-            type='submit'
-            className='w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50'
-            disabled={loading}
+          <RadioGroup
+            value={userType}
+            onValueChange={(value) =>
+              setUserType(value as 'MERCHANT' | 'CONSUMER')
+            }
+            required
           >
+            <div className='flex flex-col gap-2'>
+              <Label className='flex items-center gap-2'>
+                <RadioGroupItem value='MERCHANT' /> Comerciante
+              </Label>
+              <Label className='flex items-center gap-2'>
+                <RadioGroupItem value='CONSUMER' /> Consumidor
+              </Label>
+            </div>
+          </RadioGroup>
+          {error && <div className='text-red-600 text-sm'>{error}</div>}
+          <Button type='submit' className='w-full' disabled={loading}>
             {loading ? 'Guardando...' : 'Continuar'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -166,3 +166,46 @@ export interface DashboardCardProps {
     isPositive: boolean;
   };
 }
+
+// Perfil de negocio para merchants
+export interface BusinessProfile {
+  name: string;
+  description?: string;
+  businessType:
+    | 'Restaurante'
+    | 'Bar'
+    | 'Cafetería'
+    | 'Heladería'
+    | 'Panadería'
+    | 'Food Truck'
+    | 'Otro';
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: 'Argentina';
+  };
+  phone: {
+    countryPrefix: string; // Ej: '+54'
+    number: string;
+  };
+  email: string;
+  website?: string;
+  social?: {
+    instagram?: string;
+    facebook?: string;
+    other?: string;
+  };
+  logoUrl?: string;
+  brandColors?: {
+    primary?: string; // hex o rgb
+    secondary?: string; // hex o rgb
+  };
+  businessHours: Array<{
+    days: string[]; // Ej: ['Lunes', 'Martes']
+    open: string; // '09:00'
+    close: string; // '18:00'
+    closed?: boolean;
+  }>;
+}

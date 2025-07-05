@@ -1,6 +1,9 @@
 import { UserButton } from '@clerk/nextjs';
 import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -31,28 +34,42 @@ export default async function DashboardPage() {
               tus comercios, empleados y premios.
             </p>
             <div className='mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-              <div className='bg-white p-6 rounded-lg shadow'>
-                <h3 className='text-lg font-medium text-gray-900'>Comercios</h3>
-                <p className='mt-2 text-sm text-gray-600'>
-                  Gestiona tus comercios
-                </p>
-              </div>
-              <div className='bg-white p-6 rounded-lg shadow'>
-                <h3 className='text-lg font-medium text-gray-900'>Empleados</h3>
-                <p className='mt-2 text-sm text-gray-600'>
-                  Administra tu equipo
-                </p>
-              </div>
-              <div className='bg-white p-6 rounded-lg shadow'>
-                <h3 className='text-lg font-medium text-gray-900'>Premios</h3>
-                <p className='mt-2 text-sm text-gray-600'>
-                  Configura recompensas
-                </p>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Comercios</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className='text-sm text-gray-600'>
+                    Gestiona tus comercios
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Empleados</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className='text-sm text-gray-600'>Administra tu equipo</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Premios</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className='text-sm text-gray-600'>Configura recompensas</p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </main>
+
+      <div className='flex justify-center mt-10'>
+        <Link href='/dashboard/business-profile'>
+          <Button>Gestionar perfil de negocio</Button>
+        </Link>
+      </div>
     </div>
   );
 }

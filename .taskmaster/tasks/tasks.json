@@ -179,8 +179,8 @@
             "title": "Design Business Profile Form",
             "description": "Create the layout and fields for the business profile form, ensuring it captures all necessary business information (e.g., name, address, contact details, business type).",
             "dependencies": [],
-            "details": "Define required and optional fields, validation rules, and user interface elements for the form.",
-            "status": "pending",
+            "details": "Define required and optional fields, validation rules, and user interface elements for the form.\n<info added on 2025-07-05T14:51:33.236Z>\nImplementation plan for the business profile form:\n\n- Create a new form component in the appropriate folder (e.g., src/components/business/BusinessProfileForm.tsx).\n- Define the data schema and types for the business profile, including all validated and structured fields as per the final proposal.\n- Use Shadcn/ui and Tailwind CSS for layout and inputs, ensuring accessibility and usability.\n- Implement a country select (Argentina only for now) and a phone prefix select (+54 by default, prepared for more countries).\n- For the logo, use an image input with preview and display a 1:1 format recommendation.\n- For brand colors, use color inputs allowing hex/rgb, with validation and visual aid.\n- For business hours, create a subcomponent to select day ranges, opening/closing times, and mark closed days.\n- Validate all required fields and display clear error messages.\n- Prepare the form for integration with save logic (next subtask).\n\nPrioritize visual clarity, extensibility, and user experience.\n</info added on 2025-07-05T14:51:33.236Z>",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -191,7 +191,7 @@
               1
             ],
             "details": "Integrate form with state management, handle form submission, and display validation errors or success messages.",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": ""
           },
           {
@@ -636,7 +636,7 @@
     ],
     "metadata": {
       "created": "2025-06-23T23:21:53.029Z",
-      "updated": "2025-06-25T00:09:11.791Z",
+      "updated": "2025-07-05T14:51:33.638Z",
       "description": "Tasks for master context"
     }
   }
